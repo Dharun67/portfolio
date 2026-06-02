@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video Test</title>
+  <style>
+    body { background: #111; color: #fff; font-family: monospace; padding: 20px; }
+    .video-test { margin: 20px 0; padding: 15px; border: 2px solid #333; }
+    .status { padding: 5px 10px; border-radius: 4px; font-weight: bold; }
+    .success { background: #0a0; color: #000; }
+    .error { background: #a00; color: #fff; }
+    video { max-width: 400px; display: block; margin: 10px 0; }
+  </style>
+</head>
+<body>
+  <h1>Video Playback Test</h1>
+  <div id="results"></div>
+
+  <script>
+    const videos = [
+      { name: 'Video 1 (MP4)', src: 'IMG_0801.mp4' },
+      { name: 'Video 1 (MOV)', src: 'IMG_0801.MOV' },
+      { name: 'Video 2', src: 'IMG_0802.MOV' },
+      { name: 'Video 3', src: 'IMG_0803.MP4' },
+      { name: 'Video 4', src: 'vedio4.MP4' },
+      { name: 'Video 5', src: 'IMG_0805.MP4' },
+      { name: 'Video 6', src: 'IMG_0806.MP4' },
+      { name: 'Video 7', src: 'IMG_0810.MP4' },
+      { name: 'Video 8', src: 'IMG_0811.MP4' },
+      { name: 'Video 9', src: 'IMG_0812.MP4' }
+    ];
+
+    const resultsDiv = document.getElementById('results');
+
+    videos.forEach(({ name, src }) => {
+      const div = document.createElement('div');
+      div.className = 'video-test';
+      
+      const title = document.createElement('h3');
+      title.textContent = name;
+      div.appendChild(title);
+
+      const statusSpan = document.createElement('span');
+      statusSpan.className = 'status';
+      statusSpan.textContent = 'Testing...';
+      div.appendChild(statusSpan);
+
+      const video = document.createElement('video');
+      video.controls = true;
+      video.preload = 'metadata';
+      video.style.display = 'none';
+      
+      const source = document.createElement('source');
+      source.src = src;
+      video.appendChild(source);
+
+      video.addEventListener('loadedmetadata', () => {
+        statusSpan.className = 'status success';
+        statusSpan.textContent = `✓ CAN PLAY (${video.duration.toFixed(1)}s, ${video.videoWidth}x${video.videoHeight})`;
+        video.style.display = 'block';
+      });
+
+      video.addEventListener('error', () => {
+        statusSpan.className = 'status error';
+        statusSpan.textContent = '✗ CANNOT LOAD';
+      });
+
+      div.appendChild(video);
+      resultsDiv.appendChild(div);
+    });
+  </script>
+</body>
+</html>
